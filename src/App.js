@@ -1,7 +1,7 @@
 import { useState } from "react";
-
 import { useSelector, useDispatch } from "react-redux";
-import { addAction, deleteAction, findAction } from "./redux/slice";
+import { findAction } from "./redux/slice";
+import { addContact, deleteContact } from "./redux/operations";
 import { getContacts, getFilter } from "./redux/selectors";
 
 import PhoneEditor from "./components/PhoneEditor/PhoneEditor";
@@ -25,7 +25,7 @@ const App = () => {
     }
   };
 
-  const addContact = (name, number) => {
+  const handleAddContact = (name, number) => {
     if (!name || !number || name.trim() === "" || number.trim() === "") {
       return;
     }
@@ -39,7 +39,7 @@ const App = () => {
       return;
     }
 
-    dispatch(addAction({ name: name.trim(), number: number.trim() }));
+    dispatch(addContact({ name: name.trim(), number: number.trim() }));
     setName("");
     setNumber("");
   };
@@ -48,8 +48,8 @@ const App = () => {
     dispatch(findAction(e.target.value));
   };
 
-  const deleteContact = (id) => {
-    dispatch(deleteAction(id));
+  const handleDeleteContact = (id) => {
+    dispatch(deleteContact(id));
   };
 
   const filteredContacts = contacts.filter(
@@ -61,8 +61,18 @@ const App = () => {
     <div className="App">
       <h1>Phonebook</h1>
       <div>
-        <PhoneEditor onChange={handleInputChange} name={name} number={number} onAddContact={addContact} />
-        <PhoneList contacts={filteredContacts} filter={filter} onFilterChange={handleFilterChange} onDelete={deleteContact} />
+        <PhoneEditor 
+          onChange={handleInputChange} 
+          name={name} 
+          number={number} 
+          onAddContact={handleAddContact} 
+        />
+        <PhoneList 
+          contacts={filteredContacts} 
+          filter={filter} 
+          onFilterChange={handleFilterChange} 
+          onDelete={handleDeleteContact} 
+        />
       </div>
     </div>
   );
